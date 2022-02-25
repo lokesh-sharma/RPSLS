@@ -12,9 +12,9 @@ public static class Signs
 
 }
 
-public abstract class RuleMatrix 
+public abstract class RuleMatrix
 {
-    public abstract int Execute(string p1, string p2);
+    public abstract int Execute(string player1Move, string player2Move);
 }
 
 public class GameAI 
@@ -22,11 +22,11 @@ public class GameAI
     List<string> validMoves = new List<string>{Signs.rock, Signs.paper, Signs.scissor, Signs.lizard, Signs.spock};
     public string GetNextMove()
     {
-        return validMoves[Random.Range(1,validMoves.Count)];
+        return validMoves[Random.Range(0,validMoves.Count-1)];
     }
 }
 
-public class StandardRuleMatrix : RuleMatrix 
+public class StandardRuleMatrix : RuleMatrix
 {
 	Dictionary<string, int> rules;
 
@@ -75,11 +75,13 @@ public class GameManager : Singleton<GameManager>
     RuleMatrix matrix;
     bool isActive;
     GameAI gameAI;
+    GameScreen gameScreen;
 
     int streak;
 
-    public void StartGame(RuleMatrix ruleMatrix)
+    public void StartGame(RuleMatrix ruleMatrix, GameScreen screen)
     {
+        gameScreen = screen;
         gameAI = new GameAI();
         matrix = ruleMatrix;
         isActive = true;
@@ -107,9 +109,12 @@ public class GameManager : Singleton<GameManager>
 
     public void EndGame()
     {
+        UserManager.Instance.UpdateHighScore(streak);
         matrix = null;
         isActive = false;
         streak = 0;
         gameAI = null;
+        gameScreen.EndGame();
+        gameScreen = null;
     }
 }
