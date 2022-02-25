@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UserOptionsPanel : MonoBehaviour
 {
@@ -12,20 +13,34 @@ public class UserOptionsPanel : MonoBehaviour
     float turnTimer = MAX_TURN_TIME;
 
     public Image timerBar;
+    public Text timeText;
+
+    Vector3 orgPos;
+    void Start()
+    {
+        orgPos = transform.position;
+    }
     public void OnClick(string id)
     {
         turnTimer = MAX_TURN_TIME;
-        Debug.Log(GameManager.Instance.ExecuteTurn(id));
+        Hide();
+        GameManager.Instance.ExecuteTurn(id);
     }
 
-    void OnEnable()
+    public void Show()
     {
-        EventManager.Instance.StartListening("game-state" , OnGameStateChanged);
+        this.gameObject.SetActive(true);
+        turnTimer = MAX_TURN_TIME;
+        timerBar.rectTransform.sizeDelta = new Vector2( turnTimer/MAX_TURN_TIME*TIMER_BAR_WIDTH, TIMER_BAR_HEIGHT);
+
+        Vector3 pos = new Vector3(orgPos.x,-200,0);
+        transform.position = pos;
+        transform.DOMoveY(0,0.25f);
     }
 
-    void OnDisable()
+    public void Hide()
     {
-        EventManager.Instance.StopListening("game-state" , OnGameStateChanged);
+        this.gameObject.SetActive(false);
     }
 
     void FixedUpdate()
@@ -33,19 +48,12 @@ public class UserOptionsPanel : MonoBehaviour
         if(!GameManager.Instance.IsActive()) return;
 
         turnTimer -= Time.deltaTime;
+        timeText.text = Mathf.CeilToInt(turnTimer).ToString() + " secs";
         if(turnTimer <= 0)
         {
             GameManager.Instance.EndGame();
         }
 
-        timerBar.rectTransform.sizeDelta = new Vector2( turnTimer/MAX_TURN_TIME*TIMER_BAR_WIDTH, TIMER_BAR_HEIGHT);
-    }
-
-    void OnGameStateChanged(EventData data)
-    {
-        EventDataInt eventData = data as EventDataInt;
-        
-        turnTimer = MAX_TURN_TIME;
         timerBar.rectTransform.sizeDelta = new Vector2( turnTimer/MAX_TURN_TIME*TIMER_BAR_WIDTH, TIMER_BAR_HEIGHT);
     }
 }

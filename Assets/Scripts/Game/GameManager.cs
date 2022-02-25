@@ -13,11 +13,12 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame(RuleMatrix ruleMatrix, GameScreen screen)
     {
-        gameScreen = screen;
         gameAI = new GameAI();
         matrix = ruleMatrix;
         isActive = true;
         streak = 0;
+        gameScreen = screen;
+        gameScreen.StartGame();
     }
 
     public int ExecuteTurn(string playerSign)
@@ -25,9 +26,10 @@ public class GameManager : Singleton<GameManager>
         if(!isActive) return -1;
 
         string aiMove = gameAI.GetNextMove();
-        Debug.Log("Ai move : " + aiMove);
         int result =  matrix.Execute(playerSign, aiMove);
-        if(result == 1)
+        LastRoundResult lastRoundResult = new LastRoundResult(playerSign, aiMove, result);
+        gameScreen.NextRound(lastRoundResult);
+        if(result == 1 || result == 0)
         {
             streak++;
         }
@@ -48,9 +50,7 @@ public class GameManager : Singleton<GameManager>
         gameAI = null;
         gameScreen.EndGame();
         gameScreen = null;
-        EventDataInt gameState = new EventDataInt();
-        gameState.value = 0;
-        EventManager.Instance.TriggerEvent("game-state" , gameState);
+        EventManager.Instance.TriggerEvent("game-over");
     }
 
     public bool IsActive()

@@ -14,10 +14,9 @@ public class MainMenu : MonoBehaviour
     }
     void Start()
     {
-
-        int hScore = UserManager.Instance.GetHighScore();
-        highScore.text = "HighScore:\n" +  hScore;
+        SetHighScore();
         gameScreen.gameObject.SetActive(false);
+        EventManager.Instance.StartListening("game-over", UpdateHighScore);
     }
 
     public void OnClickPlay()
@@ -25,5 +24,16 @@ public class MainMenu : MonoBehaviour
         StandardRuleMatrix standardRuleMatrix = new StandardRuleMatrix();
         GameManager.Instance.StartGame(standardRuleMatrix, gameScreen);
         gameScreen.gameObject.SetActive(true);
+    }
+
+    void UpdateHighScore(EventData unused)
+    {
+        SetHighScore();
+    }
+
+    void SetHighScore()
+    {
+        int hScore = UserManager.Instance.GetHighScore();
+        highScore.text = "HighScore:\n" +  hScore;
     }
 }
