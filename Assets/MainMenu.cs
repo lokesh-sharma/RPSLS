@@ -7,10 +7,14 @@ public class MainMenu : MonoBehaviour
 {
     public GameScreen gameScreen;
     public Text highScore;
-    //public 
-    void Start()
+    
+    void Awake()
     {
         UserManager.Instance.Initialize();
+    }
+    void Start()
+    {
+
         int hScore = UserManager.Instance.GetHighScore();
         highScore.text = "HighScore:\n" +  hScore;
         gameScreen.gameObject.SetActive(false);
