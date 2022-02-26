@@ -8,12 +8,16 @@ public class GameScreen : MonoBehaviour
 {
     public UserOptionsPanel userOptionsPanel;
     public Transform playerContainer;
+    public GameObject initialState;
+    public GameObject crownPlayer;
+    public GameObject crownAI;
     public Text playerSign;
     public Text aiSign;
     public Text winner;
 
     public void StartGame()
     {
+        initialState.SetActive(true);
         winner.text = "";
         playerContainer.gameObject.SetActive(false);
         userOptionsPanel.Show();
@@ -22,15 +26,18 @@ public class GameScreen : MonoBehaviour
     {
         userOptionsPanel.Hide();
         Sequence seq = DOTween.Sequence();
-        seq.AppendInterval(2.0f).AppendCallback(()=>{
+        seq.AppendInterval(1.5f).AppendCallback(()=>{
             this.gameObject.SetActive(false);
         });
     }
 
     public void NextRound(LastRoundResult lastRoundResult)
     {
+        initialState.SetActive(false);
         playerSign.text = lastRoundResult.playerSign;
         aiSign.text = lastRoundResult.aISign;
+        crownPlayer.SetActive(false);
+        crownAI.SetActive(false);
 
         if(lastRoundResult.result == 0)
         {
@@ -38,10 +45,12 @@ public class GameScreen : MonoBehaviour
         }
         else if(lastRoundResult.result == 1)
         {
+            crownPlayer.SetActive(true);
             winner.text = "You Won!!";
         }
         else
         {
+            crownAI.SetActive(true);
             winner.text = "Shelbot Won!!\nGame Over";
         }
 

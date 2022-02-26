@@ -33,7 +33,7 @@ public class UserOptionsPanel : MonoBehaviour
         turnTimer = MAX_TURN_TIME;
         timerBar.rectTransform.sizeDelta = new Vector2( turnTimer/MAX_TURN_TIME*TIMER_BAR_WIDTH, TIMER_BAR_HEIGHT);
 
-        Vector3 pos = new Vector3(orgPos.x,-200,0);
+        Vector3 pos = new Vector3(orgPos.x,-500,0);
         transform.position = pos;
         transform.DOMoveY(0,0.25f);
     }

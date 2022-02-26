@@ -34,6 +34,6 @@ public class MainMenu : MonoBehaviour
     void SetHighScore()
     {
         int hScore = UserManager.Instance.GetHighScore();
-        highScore.text = "HighScore:\n" +  hScore;
+        highScore.text = "High Score : " +  hScore;
     }
 }
