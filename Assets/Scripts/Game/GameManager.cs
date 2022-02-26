@@ -41,14 +41,14 @@ public class GameManager : Singleton<GameManager>
         return result;
     }
 
-    public void EndGame()
+    public void EndGame(bool outOfTime = false)
     {
         UserManager.Instance.UpdateHighScore(streak);
         matrix = null;
         isActive = false;
         streak = 0;
         gameAI = null;
-        gameScreen.EndGame();
+        gameScreen.EndGame(outOfTime);
         gameScreen = null;
         EventManager.Instance.TriggerEvent("game-over");
     }

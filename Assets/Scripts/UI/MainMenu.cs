@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnClickPlay()
     {
+        AudioManager.Instance.PlayEffect("click");
         StandardRuleMatrix standardRuleMatrix = new StandardRuleMatrix();
         GameManager.Instance.StartGame(standardRuleMatrix, gameScreen);
         gameScreen.gameObject.SetActive(true);

@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class UserOptionsPanel : MonoBehaviour
 {
-    const float MAX_TURN_TIME = 2.0f;
+    const float MAX_TURN_TIME = 3.0f;
     const float TIMER_BAR_WIDTH = 500.0f;
 
     const float TIMER_BAR_HEIGHT = 20.0f;
@@ -25,6 +25,7 @@ public class UserOptionsPanel : MonoBehaviour
         turnTimer = MAX_TURN_TIME;
         Hide();
         GameManager.Instance.ExecuteTurn(id);
+        AudioManager.Instance.PlayEffect("click");
     }
 
     public void Show()
@@ -51,7 +52,7 @@ public class UserOptionsPanel : MonoBehaviour
         timeText.text = Mathf.CeilToInt(turnTimer).ToString() + " secs";
         if(turnTimer <= 0)
         {
-            GameManager.Instance.EndGame();
+            GameManager.Instance.EndGame(true);
         }
 
         timerBar.rectTransform.sizeDelta = new Vector2( turnTimer/MAX_TURN_TIME*TIMER_BAR_WIDTH, TIMER_BAR_HEIGHT);
